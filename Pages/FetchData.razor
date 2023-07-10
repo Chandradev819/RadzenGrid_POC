@@ -1,0 +1,58 @@
+﻿@page "/fetchdata"
+@using KendoGrid.Data
+@inject WeatherForecastService ForecastService
+@using Microsoft.AspNetCore.Components.Web
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <RadzenDataGrid Data="@forecasts"
+                    TItem="WeatherForecast"
+                    AllowVirtualization="true"
+                    AllowPaging="true"
+                    PageSize="10"
+                    AllowFiltering="true"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                    LogicalFilterOperator="LogicalFilterOperator.Or"
+                    AllowSorting="true">
+        <Columns>
+            <RadzenDataGridColumn TItem="WeatherForecast" Property="Date" Title="Date" >
+                <Template Context="forecasts">
+                    @forecasts.Date.ToShortDateString()
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="WeatherForecast" Property="TemperatureC" Title="TemperatureC" />
+            <RadzenDataGridColumn TItem="WeatherForecast" Property="Summary" Title="Summary" />
+            <RadzenDataGridColumn TItem="WeatherForecast" Property="TemperatureF" Title="TemperatureF" />
+            <RadzenDataGridColumn TItem="WeatherForecast" Width="@(IsEditMode ? "100px" : "200px")" Title="Actions">
+                <Template Context="forecasts">
+                    <button class="btn btn-primary" @onclick="() => OnEditButtonClick()">Edit</button>
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+}
+
+@code {
+    private WeatherForecast[]? forecasts;
+    private bool IsEditMode = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await ForecastService.GetForecastAsync(DateOnly.FromDateTime(DateTime.Now));
+    }
+
+    private void OnEditButtonClick()
+    {
+        IsEditMode = !IsEditMode;
+    }
+}

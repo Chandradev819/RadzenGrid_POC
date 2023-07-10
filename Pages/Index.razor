@@ -1,0 +1,46 @@
+﻿@page "/"
+@inject IJSRuntime JSRuntime
+
+
+<PageTitle>Index</PageTitle>
+<RadzenCard>
+    <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Manual Upload</RadzenText>
+    <div style="width: 400px;">
+        <RadzenUpload @ref="upload" Auto="false" Multiple="true" Url="upload/multiple"
+                      Change=@(args => OnChange(args, "Upload with Icon"))
+                      Progress=@(args => OnProgress(args, "Manual Upload")) class="w-100" style="height: 30px;">
+        </RadzenUpload>
+    </div>
+    <RadzenButton Text="Upload" Click=@(args => upload.Upload()) class="d-block mt-2" />
+</RadzenCard>
+
+<style>
+    .rz-upload-files .rz-upload-file-info .rz-upload-file-name, .rz-fileupload-row,
+    .rz-upload-files .rz-upload-file-info .rz-upload-file-size {
+        font-size: 10px;
+    }
+</style>
+
+
+@code
+{
+    RadzenUpload upload;
+    void OnChange(UploadChangeEventArgs args, string name)
+    {
+        foreach (var file in args.Files)
+        {
+
+        }
+    }
+
+    void OnProgress(UploadProgressArgs args, string name)
+    {
+        if (args.Progress == 100)
+        {
+            foreach (var file in args.Files)
+            {
+
+            }
+        }
+    }
+}
